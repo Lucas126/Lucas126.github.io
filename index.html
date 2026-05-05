@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucas Kautzky — Mechanical Engineering</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d0f12; --surface: #141619; --surface2: #1c1f23;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.13);
+    --accent: #e8c56d; --accent2: #4fa3c4;
+    --text: #e8e6df; --muted: #7a7a72;
+    --mono: 'Space Mono', monospace; --sans: 'DM Sans', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+ 
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 3rem; height: 60px;
+    background: rgba(13,15,18,0.85); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: 0.08em; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; color: var(--muted); transition: color 0.2s; text-transform: uppercase; }
+  .nav-links a:hover { color: var(--text); }
+ 
+  #hero {
+    min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+    padding: 6rem 3rem 4rem; position: relative; overflow: hidden;
+  }
+  .hero-grid-bg {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    pointer-events: none;
+  }
+  .hero-tag { font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+  .hero-tag::before { content: ''; display: block; width: 32px; height: 1px; background: var(--accent); }
+  h1.hero-name { font-family: var(--mono); font-size: clamp(2.5rem, 7vw, 5.5rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; max-width: 14ch; margin-bottom: 1.5rem; }
+  .hero-name span { color: var(--accent); }
+  .hero-desc { font-size: 1.1rem; color: var(--muted); max-width: 48ch; line-height: 1.7; margin-bottom: 2.5rem; font-weight: 300; }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn { font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.8rem 1.8rem; border-radius: 3px; transition: all 0.2s; cursor: pointer; border: 1px solid; display: inline-block; }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #0d0f12; font-weight: 700; }
+  .btn-primary:hover { background: #f0d080; border-color: #f0d080; }
+  .btn-secondary { background: transparent; border-color: var(--border2); color: var(--muted); }
+  .btn-secondary:hover { border-color: var(--text); color: var(--text); }
+  .hero-scroll { position: absolute; bottom: 2.5rem; left: 3rem; display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--accent), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+  @keyframes scrollPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+ 
+  section { padding: 6rem 3rem; max-width: 1100px; margin: 0 auto; }
+  .section-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 10px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border2); }
+  h2.section-title { font-family: var(--mono); font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; margin-bottom: 3rem; letter-spacing: -0.02em; }
+  .full-divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+ 
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .about-text p { color: var(--muted); font-weight: 300; margin-bottom: 1rem; font-size: 1.05rem; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .stat-cell { background: var(--surface); padding: 1.5rem; }
+  .stat-num { font-family: var(--mono); font-size: 2rem; font-weight: 700; color: var(--accent); display: block; }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+ 
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+  .skill-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; transition: border-color 0.2s; }
+  .skill-card:hover { border-color: var(--border2); }
+  .skill-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
+  .skill-icon { width: 36px; height: 36px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 3px; display: flex; align-items: center; justify-content: center; }
+  .skill-icon svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+  .skill-card-title { font-family: var(--mono); font-size: 13px; letter-spacing: 0.05em; color: var(--text); }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-family: var(--mono); font-size: 11px; padding: 3px 10px; border-radius: 2px; background: var(--surface2); color: var(--muted); border: 1px solid var(--border); letter-spacing: 0.05em; }
+ 
+  .projects-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .project-row { display: grid; grid-template-columns: 60px 1fr auto; align-items: center; gap: 2rem; background: var(--surface); padding: 1.5rem 2rem; transition: background 0.2s; }
+  .project-row:hover { background: var(--surface2); }
+  .project-num { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .project-info h3 { font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; letter-spacing: 0.03em; }
+  .project-info p { font-size: 13px; color: var(--muted); font-weight: 300; max-width: 60ch; }
+  .project-badge { font-family: var(--mono); font-size: 11px; padding: 4px 12px; border-radius: 2px; white-space: nowrap; letter-spacing: 0.06em; }
+  .badge-design { background: rgba(79,163,196,0.12); color: #4fa3c4; border: 1px solid rgba(79,163,196,0.25); }
+  .badge-print { background: rgba(232,197,109,0.1); color: #e8c56d; border: 1px solid rgba(232,197,109,0.2); }
+  .badge-sae { background: rgba(120,180,100,0.1); color: #90c878; border: 1px solid rgba(120,180,100,0.2); }
+ 
+  .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .contact-text p { color: var(--muted); font-weight: 300; margin-bottom: 2rem; }
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-link { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.05em; transition: color 0.2s; }
+  .contact-link:hover { color: var(--accent); }
+  .contact-link svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; flex-shrink: 0; }
+ 
+  footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; }
+  footer p { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.05em; }
+ 
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .hero-tag { animation: fadeUp 0.6s ease both; }
+  h1.hero-name { animation: fadeUp 0.6s 0.1s ease both; }
+  .hero-desc { animation: fadeUp 0.6s 0.2s ease both; }
+  .hero-cta { animation: fadeUp 0.6s 0.3s ease both; }
+ 
+  @media (max-width: 700px) {
+    nav { padding: 0 1.5rem; }
+    section { padding: 4rem 1.5rem; }
+    #hero { padding: 5rem 1.5rem 4rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .contact-wrap { grid-template-columns: 1fr; gap: 2rem; }
+    .project-row { grid-template-columns: 40px 1fr; }
+    .project-badge { display: none; }
+    .hero-scroll { display: none; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+ 
+<nav>
+  <span class="nav-logo">LK.eng</span>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+ 
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-tag">Mechanical Engineering Student — Iowa State University</div>
+  <h1 class="hero-name">Lucas<br><span>Kautzky</span></h1>
+  <p class="hero-desc">Building things — from formula car cooling systems to night-vision helmets. Mechanical engineering student with a hands-on approach to design, fabrication, and problem solving.</p>
+  <div class="hero-cta">
+    <a href="#projects" class="btn btn-primary">View Projects</a>
+    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+ 
+<hr class="full-divider">
+ 
+<section id="about">
+  <div class="section-label">01 &mdash; About</div>
+  <h2 class="section-title">Who I Am</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>I'm a mechanical engineering student at Iowa State University with a passion for hands-on design and fabrication. My coursework covers statics, dynamics, thermodynamics, and materials science.</p>
+      <p>On the SAE Formula Team, I work as a junior cooling engineer — researching tubing options and routing cooling systems through a competition-spec formula car. I enjoy the bridge between theory and physical build.</p>
+      <p>Outside of engineering, I've been playing guitar since 2017 — performing in concert series with rotating band lineups in front of 250+ audiences.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-cell">
+        <span class="stat-num">3.33</span>
+        <div class="stat-label">GPA</div>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-num">May '29</span>
+        <div class="stat-label">Expected graduation</div>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-num">SAE</span>
+        <div class="stat-label">Formula Team — Cooling</div>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-num">ISU</span>
+        <div class="stat-label">Iowa State University</div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<hr class="full-divider">
+ 
+<section id="skills">
+  <div class="section-label">02 &mdash; Skills</div>
+  <h2 class="section-title">Technical Toolkit</h2>
+  <div class="skills-grid">
+ 
+    <div class="skill-card">
+      <div class="skill-card-header">
+        <div class="skill-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <span class="skill-card-title">CAD / Modeling</span>
+      </div>
+      <div class="skill-tags">
+        <span class="tag">SolidWorks</span>
+        <span class="tag">Autodesk Inventor</span>
+        <span class="tag">Onshape</span>
+        <span class="tag">Mesh Mixer</span>
+      </div>
+    </div>
+ 
+    <div class="skill-card">
+      <div class="skill-card-header">
+        <div class="skill-icon">
+          <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <span class="skill-card-title">3D Printing / FDM</span>
+      </div>
+      <div class="skill-tags">
+        <span class="tag">Bambu Studio</span>
+        <span class="tag">Creality Slicer</span>
+        <span class="tag">FDM Printing</span>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+<hr class="full-divider">
+ 
+<section id="projects">
+  <div class="section-label">03 &mdash; Projects</div>
+  <h2 class="section-title">Selected Work</h2>
+  <div class="projects-grid">
+ 
+    <div class="project-row">
+      <span class="project-num">01</span>
+      <div class="project-info">
+        <h3>Night Vision Helmet</h3>
+        <p>Designing and printing a helmet with an integrated IR camera feed displayed on an internal screen — combining FDM fabrication with basic electronics integration.</p>
+      </div>
+      <span class="project-badge badge-print">In Progress</span>
+    </div>
+ 
+    <div class="project-row">
+      <span class="project-num">02</span>
+      <div class="project-info">
+        <h3>SAE Formula Car — Cooling System</h3>
+        <p>Researched cooling tube specifications for rule compliance and helped route the system through the car chassis as part of Iowa State's SAE Formula Team powertrain group.</p>
+      </div>
+      <span class="project-badge badge-sae">SAE / Powertrain</span>
+    </div>
+ 
+    <div class="project-row">
+      <span class="project-num">03</span>
+      <div class="project-info">
+        <h3>John Deere Pedal Tractor Headlight</h3>
+        <p>Custom modeled and printed a replacement headlight housing for an antique John Deere pedal tractor, reverse-engineering the original geometry for a precise fit.</p>
+      </div>
+      <span class="project-badge badge-design">CAD / FDM</span>
+    </div>
+ 
+    <div class="project-row" style="grid-template-columns: 60px 1fr auto auto; gap: 1.5rem;">
+  <span class="project-num">04</span>
+  <div class="project-info">
+    <h3>Full-Scale Halo Spartan Armor</h3>
+    <p>Scaled, sliced, and printed a complete set of Halo Spartan armor across multiple parts — requiring precise scaling, fit testing, and assembly across many print sessions.</p>
+  </div>
+  <img src="Halo.jpg" alt="Halo Spartan Armor" style="width: 120px; height: 80px; object-fit: cover; border-radius: 3px; border: 1px solid rgba(255,255,255,0.1);">
+  <span class="project-badge badge-print">3D Print</span>
+</div>
+ 
+  </div>
+</section>
+ 
+<hr class="full-divider">
+ 
+<section id="contact">
+  <div class="section-label">04 &mdash; Contact</div>
+  <h2 class="section-title">Get in Touch</h2>
+  <div class="contact-wrap">
+    <div class="contact-text">
+      <p>I'm actively seeking a mechanical engineering internship for summer 2026. If you'd like to connect or discuss a role, feel free to reach out.</p>
+      <a href="mailto:Lkautzky@iastate.edu" class="btn btn-primary">Send an Email</a>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:Lkautzky@iastate.edu" class="contact-link">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Lkautzky@iastate.edu
+      </a>
+      <a href="tel:3312200624" class="contact-link">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+        331-220-0624
+      </a>
+      <a href="https://www.linkedin.com/in/lucas-kautzky-18b60a383/" class="contact-link">
+        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        linkedin.com/in/lucas-kautzky
+      </a>
+      </a>
+    </div>
+  </div>
+</section>
+ 
+<footer>
+  <p>&copy; 2026 Lucas Kautzky &mdash; Mechanical Engineering</p>
+  <p>Iowa State University &mdash; Expected May 2029</p>
+</footer>
+ 
+</body>
+</html>
